@@ -9,7 +9,8 @@ print('Working with TensorFlow version %s' % tf.__version__)
 display_graphics = False
 
 # Models we will train
-names_of_models = ['model1', 'model2']
+names_of_models = ['model1', 'model2', 'model3']
+
 models_to_test = []
 
 # Read fashion_mnist data set
@@ -19,6 +20,7 @@ fashion_mnist = keras.datasets.fashion_mnist
 
 class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
+# Data adjustment
 train_images = train_images / 255.0
 test_images = test_images / 255.0
 
@@ -35,6 +37,7 @@ if display_graphics:
         plt.imshow(train_images[index], cmap=plt.cm.binary)
         plt.xlabel(class_names[train_labels[index]])
     plt.show()
+
 
 # *** Model 1 ***
 if 'model1' in names_of_models:
@@ -54,6 +57,7 @@ if 'model1' in names_of_models:
     model1.fit(train_images, train_labels, epochs=5)
 
     models_to_test.append(model1)
+
 
 # *** Model 2 ***
 if 'model2' in names_of_models:
@@ -76,14 +80,38 @@ if 'model2' in names_of_models:
     models_to_test.append(model2)
 
 
+# *** Model 3 ConvNet ***
+if 'model3' in names_of_models:
+    # Modify training and testing data
+    train_images = train_images.reshape((len(train_images), 28, 28, 1))
+    test_images = test_images.reshape((len(test_images), 28, 28, 1))
+
+    # Building model using Keras
+    model3 = keras.Sequential([
+        keras.layers.Conv2D(32, (3, 3), activation=tf.nn.relu, input_shape=(28, 28, 1)),
+        keras.layers.MaxPooling2D((2, 2)),
+        keras.layers.Conv2D(64, (3, 3), activation=tf.nn.relu),
+        keras.layers.MaxPooling2D((2, 2)),
+        keras.layers.Conv2D(64, (3, 3), activation=tf.nn.relu),
+        keras.layers.Flatten(),
+        keras.layers.Dense(64, activation=tf.nn.relu),
+        keras.layers.Dense(10, activation=tf.nn.softmax)
+    ])
+
+    # Compiling model
+    model3.compile(optimizer=tf.train.AdamOptimizer(),
+                   loss='sparse_categorical_crossentropy',
+                   metrics=['accuracy'])
+
+    # Training model
+    model3.fit(train_images, train_labels, epochs=5, batch_size=64)
+
+    models_to_test.append(model3)
+
+
 # Evaluating accuracy
-print('')
+print('\n---------')
 print('Test accuracy for trained models')
 for index in range(len(models_to_test)):
     test_loss, test_acc = models_to_test[index].evaluate(test_images, test_labels)
     print('Test accuracy for Model %s: %s' % (names_of_models[index], test_acc))
-
-
-
-
-

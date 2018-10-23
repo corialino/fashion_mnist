@@ -11,8 +11,6 @@ display_graphics = False
 # Models we will train
 names_of_models = ['model1', 'model2', 'model3']
 
-models_to_test = []
-
 # Read fashion_mnist data set
 fashion_mnist = keras.datasets.fashion_mnist
 
@@ -56,7 +54,9 @@ if 'model1' in names_of_models:
     # Training model
     model1.fit(train_images, train_labels, epochs=5)
 
-    models_to_test.append(model1)
+    # Evaluating accuracy
+    test_loss, test_acc = model1.evaluate(test_images, test_labels)
+    print('Test accuracy for Model 1: %s' % test_acc)
 
 
 # *** Model 2 ***
@@ -77,7 +77,9 @@ if 'model2' in names_of_models:
     # Training model
     model2.fit(train_images, train_labels, epochs=5)
 
-    models_to_test.append(model2)
+    # Evaluating accuracy
+    test_loss, test_acc = model2.evaluate(test_images, test_labels)
+    print('Test accuracy for Model 2: %s' % test_acc)
 
 
 # *** Model 3 ConvNet ***
@@ -106,12 +108,6 @@ if 'model3' in names_of_models:
     # Training model
     model3.fit(train_images, train_labels, epochs=5, batch_size=64)
 
-    models_to_test.append(model3)
-
-
-# Evaluating accuracy
-print('\n---------')
-print('Test accuracy for trained models')
-for index in range(len(models_to_test)):
-    test_loss, test_acc = models_to_test[index].evaluate(test_images, test_labels)
-    print('Test accuracy for Model %s: %s' % (names_of_models[index], test_acc))
+    # Evaluating accuracy
+    test_loss, test_acc = model3.evaluate(test_images, test_labels)
+    print('Test accuracy for Model 3: %s' % test_acc)

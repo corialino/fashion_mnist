@@ -9,7 +9,7 @@ print('Working with TensorFlow version %s' % tf.__version__)
 display_graphics = False
 
 # Models we will train
-names_of_models = ['model1', 'model2', 'model3']
+models_to_train = ['model1', 'model2', 'model3']
 
 # Read fashion_mnist data set
 fashion_mnist = keras.datasets.fashion_mnist
@@ -38,7 +38,7 @@ if display_graphics:
 
 
 # *** Model 1 ***
-if 'model1' in names_of_models:
+if 'model1' in models_to_train:
     # Building model using Keras
     model1 = keras.Sequential([
         keras.layers.Flatten(input_shape=(28, 28)),
@@ -60,7 +60,7 @@ if 'model1' in names_of_models:
 
 
 # *** Model 2 ***
-if 'model2' in names_of_models:
+if 'model2' in models_to_train:
     # Building model using Keras
     model2 = keras.Sequential([
         keras.layers.Flatten(input_shape=(28, 28)),
@@ -83,7 +83,7 @@ if 'model2' in names_of_models:
 
 
 # *** Model 3 ConvNet ***
-if 'model3' in names_of_models:
+if 'model3' in models_to_train:
     # Modify training and testing data
     train_images = train_images.reshape((len(train_images), 28, 28, 1))
     test_images = test_images.reshape((len(test_images), 28, 28, 1))
@@ -91,8 +91,6 @@ if 'model3' in names_of_models:
     # Building model using Keras
     model3 = keras.Sequential([
         keras.layers.Conv2D(32, (3, 3), activation=tf.nn.relu, input_shape=(28, 28, 1)),
-        keras.layers.MaxPooling2D((2, 2)),
-        keras.layers.Conv2D(64, (3, 3), activation=tf.nn.relu),
         keras.layers.MaxPooling2D((2, 2)),
         keras.layers.Conv2D(64, (3, 3), activation=tf.nn.relu),
         keras.layers.Flatten(),
